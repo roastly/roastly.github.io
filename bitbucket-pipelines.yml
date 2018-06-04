@@ -12,38 +12,41 @@ pipelines:
           - 'echo "url: https://www.aerobatic.com" >> _config.yml'
           - bundle exec jekyll build -t
           - aero deploy --directory _site
-    
-    - step:
-            name: Deploy to TimHacker Github pages
-            deployment: staging
-            script:
-              - '[ -f Gemfile ] && bundle install'
-              - bundle exec jekyll build -t
-              - git clone https://github.com/timhacker/timhacker.github.io.git
-              - cp -r /opt/atlassian/pipelines/agent/build/_site/* timhacker.github.io/
-              - cd timhacker.github.io
-              - git config --global user.email "timothyhacker@gmail.com"
-              - git config --global user.name "Tim Hacker"
-              - git config --global push.default simple
-              - git add --all
-              - git commit -m "`date`"
-              - git push https://$githubtoken@github.com/timhacker/timhacker.github.io.git
 
-    - step:
-        name: Deploy to Roastly org Github pages
-        deployment: production
-        script:
-          - '[ -f Gemfile ] && bundle install'
-          - bundle exec jekyll build -t
-          - git clone https://github.com/roastly/roastly.github.io.git
-          - cp -r /opt/atlassian/pipelines/agent/build/_site/* roastly.github.io/
-          - cd roastly.github.io
-          - git config --global user.email "timothyhacker@gmail.com"
-          - git config --global user.name "Tim Hacker"
-          - git config --global push.default simple
-          - git add --all
-          - git commit -m "`date`"
-          - git push https://$githubtoken@github.com/roastly/roastly.github.io.git
+  branches:
+    develop:
+      - step:
+          name: Deploy to TimHacker Github page
+          deployment: staging
+          script:
+            - '[ -f Gemfile ] && bundle install'
+            - bundle exec jekyll build -t
+            - git clone https://github.com/timhacker/timhacker.github.io.git
+            - cp -r /opt/atlassian/pipelines/agent/build/_site/* timhacker.github.io/
+            - cd timhacker.github.io
+            - git config --global user.email "timothyhacker@gmail.com"
+            - git config --global user.name "Tim Hacker"
+            - git config --global push.default simple
+            - git add --all
+            - git commit -m "`date`"
+            - git push https://$githubtoken@github.com/timhacker/timhacker.github.io.git
+
+    master:
+      - step:
+          name: Deploy to Roastly org on Github pages
+          deployment: production
+          script:
+            - '[ -f Gemfile ] && bundle install'
+            - bundle exec jekyll build -t
+            - git clone https://github.com/roastly/roastly.github.io.git
+            - cp -r /opt/atlassian/pipelines/agent/build/_site/* roastly.github.io/
+            - cd roastly.github.io
+            - git config --global user.email "timothyhacker@gmail.com"
+            - git config --global user.name "Tim Hacker"
+            - git config --global push.default simple
+            - git add --all
+            - git commit -m "`date`"
+            - git push https://$githubtoken@github.com/roastly/roastly.github.io.git
 
 definitions:
   caches:
